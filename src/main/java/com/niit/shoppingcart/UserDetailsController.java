@@ -3,6 +3,7 @@ package com.niit.shoppingcart;
 
 
 import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpSession;
 
 
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.niit.shoppingcart.dao.CartDAO;
+/*import com.niit.shoppingcart.dao.CartDAO;*/
 import com.niit.shoppingcart.dao.CategoryDAO;
 import com.niit.shoppingcart.dao.ProductDAO;
 import com.niit.shoppingcart.dao.SupplierDAO;
 import com.niit.shoppingcart.dao.UserDetailsDAO;
-import com.niit.shoppingcart.model.Cart;
+/*import com.niit.shoppingcart.model.Cart;*/
 import com.niit.shoppingcart.model.Category;
 import com.niit.shoppingcart.model.Product;
 import com.niit.shoppingcart.model.Supplier;
@@ -54,20 +55,20 @@ public class UserDetailsController {
 	@Autowired
 	CategoryDAO categoryDAO;
 	
-	@Autowired
+	/*@Autowired
 	Cart cart;
 	
 	@Autowired
-	CartDAO cartDAO;
+	CartDAO cartDAO;*/
 
 	@RequestMapping(value="login"  , method=RequestMethod.POST)
-	public ModelAndView login(@RequestParam(value = "id") String id,
-			@RequestParam(value = "password") String password,
-			HttpSession session) {
+	public ModelAndView login(@RequestParam(value = "id") String id,@RequestParam(value = "password") String password,HttpSession session) {
 		
 		ModelAndView mv = new ModelAndView("/Home");
 
+
 		boolean isValidUser = userDetailsDAO.isValidUser(id, password);
+		
 		if (isValidUser == true) {
 		userDetails=userDetailsDAO.get(id);
 		session.setAttribute("loggedInUser", userDetails.getName());
@@ -79,40 +80,63 @@ public class UserDetailsController {
 				mv.addObject("isAdmin", "true");
 				session.setAttribute("supplier",supplier);
 				session.setAttribute("supplierList",supplierDAO.list());
+
+				session.setAttribute("product",product);
+				session.setAttribute("productList",productDAO.list());
 				
 				session.setAttribute("category",category);
 				session.setAttribute("categoryList",categoryDAO.list());
 				
+			}
+			
+			else{
+				mv.addObject("isAdmin", "false");
+	
+
 				session.setAttribute("product",product);
 				session.setAttribute("productList",productDAO.list());
 				
-				
+				session.setAttribute("category",category);
+				session.setAttribute("categoryList",categoryDAO.list());
+		
+			
 			}
-			else{
-				mv.addObject("isAdmin", "false");
-				mv.addObject("suceessmsg","success msg");
-				
-			}
-		}else{
+		}
+		else{
 			
 				mv.addObject("InvalidCredentials", "true");
-			mv.addObject("errorMessage", "Invalid Credentials");
+			mv.addObject("errorMessage", "INVALID CREDENTIALS,PLEASE LOGIN WITH VALID CREDENTIALS");
+			session.setAttribute("supplier",supplier);
+			session.setAttribute("supplierList",supplierDAO.list());
+
+			session.setAttribute("product",product);
+			session.setAttribute("productList",productDAO.list());
+			
+			session.setAttribute("category",category);
+			session.setAttribute("categoryList",categoryDAO.list());
 		}
 
 		return mv;
-
-	}
+		}
+	
 
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request, HttpSession session) {
 		ModelAndView mv = new ModelAndView("/Home");
 		session.invalidate();
 		session = request.getSession(true);
-		session.setAttribute("category", category);
-		session.setAttribute("categoryList", categoryDAO);
-
-		mv.addObject("logoutMsg", "you are successfully loggedout");
+		session.setAttribute("supplier",supplier);
+		session.setAttribute("supplierList",supplierDAO.list());
+		
+		session.setAttribute("category",category);
+		session.setAttribute("categoryList",categoryDAO.list());
+		
+		session.setAttribute("product",product);
+		session.setAttribute("productList",productDAO.list());
+		
+		mv.addObject("logoutMsg", "LOGOUT SUCCESSFUL");
 		mv.addObject("loggedout", "true");
+		
 		return mv;
 
 	}

@@ -48,16 +48,12 @@ public class SupplierController {
 		//check whether supplier exist with this id?
 		//if exists, update the existing supplier
 		//if doesnot exist display error message
-		System.out.println("i am in updateCategory");
-		//String id=supplier.getId();
 		 supplier=supplierDAO.get(id);
-			System.out.println(supplier.getId());
 		ModelAndView mv = new ModelAndView();
-
 		if (supplierDAO.get(supplier.getId()) != null) {
 			supplierDAO.update(supplier);
-			System.out.println("updated");
-		} else {
+		} 
+		else {
 			mv.addObject("ErrorMessage", "couldnot update the record");
 		}
 		return "redirect:/supplier";
@@ -68,8 +64,6 @@ public class SupplierController {
 	public String deletesupplier(@PathVariable("id") String id) throws Exception {
 		// if id exist in supplier delete it
 		// else display error message
-		System.out.println("i am in deletesupplier");
-		System.out.println(id);
 		Supplier supplier = supplierDAO.get(id);
 		ModelAndView mv = new ModelAndView();
 

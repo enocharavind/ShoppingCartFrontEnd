@@ -2,10 +2,6 @@ package com.niit.shoppingcart;
 
 
 
-
-import javax.servlet.http.HttpSession;
-
-import org.h2.engine.Session;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import org.springframework.web.servlet.ModelAndView;
-
 import com.niit.shoppingcart.dao.CategoryDAO;
 import com.niit.shoppingcart.model.Category;
 
@@ -45,7 +39,7 @@ public class CategoryController {
 		//if exist, display error message to the admin record already  exist
 		//else save the record
 		
-		ModelAndView mv = new ModelAndView("/category");
+
 		if (categoryDAO.get(category.getId()) == null) {
 			categoryDAO.save(category);
 		} else {
@@ -57,8 +51,8 @@ public class CategoryController {
 	}
 	
 	
-	@RequestMapping(value= "category/update/{cat_id}")
-	public String updateCategory(@PathVariable("cat_id") String id ) {
+	@RequestMapping(value= "category/update/{id}")
+	public String updateCategory(@PathVariable("id") String id ) {
 		//check whether category exist with this id?
 		//if exists, update the existing category
 		//if doesnot exist display error message
@@ -76,12 +70,12 @@ public class CategoryController {
 	}
 
 	@RequestMapping("category/remove/{id}")
-	public String  deleteCategory(@PathVariable(" id") String id)
+	public String  deleteCategory(@PathVariable("id") String id)
 			throws Exception {
 		//if id exist in category delete it
 		//else display error message
 	
-		 category=categoryDAO.get(id);
+		Category category=categoryDAO.get(id);
 		ModelAndView mv = new ModelAndView("category");
 	
 	boolean flag=	categoryDAO.delete(category);

@@ -1,5 +1,8 @@
 package com.niit.shoppingcart;
 
+import javax.servlet.http.HttpSession;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,11 +38,16 @@ public class AdminController {
 	private CategoryDAO categoryDAO;
 
 	@RequestMapping("/manageCategories")
-	public ModelAndView categories(){
+	public ModelAndView categories(HttpSession session){
 		ModelAndView mv=new ModelAndView("/Home");
 		mv.addObject("category",category);
 		mv.addObject("isAdminClickedCategories","true");
 		mv.addObject("categoryList",categoryDAO.list());
+		session.setAttribute("product",product);
+		session.setAttribute("productList",productDAO.list());
+		
+		session.setAttribute("category",category);
+		session.setAttribute("categoryList",categoryDAO.list());
 		return mv;
 		
 	}
@@ -62,8 +70,9 @@ public class AdminController {
 		mv.addObject("product",product);
 		mv.addObject("isAdminClickedproducts","true");
 		mv.addObject("productList",productDAO.list());
-		mv.addObject("categoryList", categoryDAO.list());
-		mv.addObject("supplierList", supplierDAO.list());
+		mv.addObject("supplierList",supplierDAO.list());
+		mv.addObject("categoryList",categoryDAO.list());
+	
 		return mv;
 	}
 	
